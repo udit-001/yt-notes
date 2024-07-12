@@ -92,4 +92,4 @@ To view all the notes associated with a specific video, make a GET request to `/
 
 Note:
 - Ordering based on timestamp and creation time is supported for the notes list API.
-- All list endpoints support pagination.
+- All list endpoints support Limit and Offset pagination.
