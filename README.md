@@ -85,8 +85,11 @@ Note:
 - `<int:pk>` is the id of the video returned by the `/api/videos/` endpoint as response. Eg: `/api/videos/3/notes/`
 
 #### List all videos
-You can make a GET request to `/api/videos/` view all the videos stored by a user.
+To view all the videos stored by a user, make a GET request to `/api/videos/`.
 
+#### List all notes for a video
+To view all the notes associated with a specific video, make a GET request to `/api/videos/<int:pk>/notes/`, where `<int:pk>` is the ID of the video.
 
-#### List all notes
-You can make a GET request to `/api/videos/<int:pk>/notes/` view all the videos stored by a user.
+Note:
+- Ordering based on timestamp and creation time is supported for the notes list API.
+- All list endpoints support pagination.
