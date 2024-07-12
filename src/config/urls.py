@@ -5,6 +5,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from app.views import *
 
 urlpatterns = [
+    path("", start_video, name="start-video"),
+    path("video", watch_video, name="watch-video"),
     path('api/videos/', VideoCreateView.as_view(), name="video-create"),
     path('api/videos/<int:pk>/notes/', VideoNoteView.as_view(), name="note-list-create"),
     path('admin/', admin.site.urls),

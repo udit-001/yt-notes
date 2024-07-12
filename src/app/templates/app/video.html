@@ -1,0 +1,147 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
+    <div class="mt-6 mr-6 flex flex-row-reverse">
+        <a class="px-4 py-2 bg-blue-500 text-white rounded-md" href={% url 'start-video' %}>Watch another video</a>
+    </div>
+    <div class="md:flex w-full">
+        <div class="p-6 w-full">
+            <div class="flex justify-center">
+                <iframe id="video-player" class="w-full aspect-video"
+                    src="https://www.youtube.com/embed/{{video_id}}?enablejsapi=1" title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+
+            <form class="mt-4" action="#">
+                <div class="mt-4 text-xs italic" id="message">
+                </div>
+                <textarea rows="4" class="w-full p-2 border border-gray-300 rounded-md resize-none"
+                    placeholder="Type your notes here..." name="content" required></textarea>
+                <button type="submit"
+                    class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('video-player', {
+            events: {
+                'onReady': onPlayerReady,
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+
+        const dataToSend = {
+            title: event.target.videoTitle,
+            duration: event.target.getDuration(),
+            url: event.target.getVideoUrl(),
+        };
+
+        const jsonData = JSON.stringify(dataToSend);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': "{{ csrf_token }}"
+            },
+            body: new Blob([jsonData], { type: 'application/json' })
+        };
+
+        fetch("/api/videos/", requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                localStorage.setItem("videoId", data.id)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function updateStatus({type = "", text = ""}){
+        const statusElement = document.querySelector("#message");
+        if(type === "success"){
+            statusElement.classList.remove('text-red-600')
+            statusElement.classList.add('text-green-500')
+            statusElement.innerText = text;
+        }
+        else if(type === "failure"){
+            statusElement.classList.remove('text-green-500')
+            statusElement.classList.add('text-red-600')
+            statusElement.innerText = text;
+        }
+        else{
+            statusElement.classList.remove('text-red-600')
+            statusElement.classList.remove('text-green-500')
+            statusElement.innerText = text;
+        }
+    }
+
+    function clearNote(){
+        const notes = document.querySelector("textarea");
+        notes.value = "";
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault()
+
+            var formData = new FormData(this);
+            const contents = formData.get('content')
+            var videoId = localStorage.getItem("videoId")
+
+            fetch(`/api/videos/${videoId}/notes/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    content: contents,
+                    timestamp: parseInt(player.getCurrentTime()),
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token }}"
+                },
+            })
+                .then(async (response) => {
+                    const data = await response.json()
+                    if (response.status === 200 || response.status === 201) {
+                        updateStatus({ "type": "success", "text": "Note successfully saved" })
+                        clearNote()
+                        setTimeout(() => {
+                            updateStatus({})
+                        }, 3000)
+                    }
+                    else if(response.status === 400){
+                        updateStatus({"type": "failure", "text": JSON.stringify(data)})
+                    }
+                    else {
+                        updateStatus({"type": "failure", "text": "There was an error saving the note."})
+                    }
+                })
+            .then(data => {
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+{% endblock %}

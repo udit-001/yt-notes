@@ -1,7 +1,10 @@
+from django.shortcuts import redirect, render
 from rest_framework import exceptions, filters, generics
 
+from .forms import SubmitURLForm
 from .models import *
 from .serializers import *
+from .utils import extract_video_id
 
 
 class VideoCreateView(generics.ListCreateAPIView):
@@ -45,3 +48,26 @@ class VideoNoteView(generics.ListCreateAPIView):
         video_id = self.request.parser_context["kwargs"]["pk"]
         video = Video.objects.get(id=video_id)
         serializer.save(video=video)
+
+
+def start_video(request):
+    if request.method == "GET":
+        form = SubmitURLForm()
+        return render(request, "app/submit_url.html", {"form": form})
+    else:
+        form = SubmitURLForm(data=request.POST)
+        if form.is_valid():
+            request.session["url"] = extract_video_id(form.data.get("url"))
+            return redirect("watch-video")
+        else:
+            return render(request, "app/submit_url.html", {"form": form})
+
+
+def watch_video(request):
+    if request.method == "GET":
+        if request.session.get("url"):
+            return render(
+                request, "app/video.html", {"video_id": request.session.get("url")}
+            )
+        else:
+            return redirect("start-video")

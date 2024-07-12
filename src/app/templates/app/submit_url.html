@@ -1,0 +1,27 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
+      <div class="md:flex w-full">
+        <div class="p-6 w-full">
+          <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Submit a URL</div>
+          <form method="POST" class="mt-4">
+            {% csrf_token %}
+            {% for element in form %}
+                <div class="mb-2">
+                    <label for="{{ element.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">URL</label>
+                    <input type="url" name="{{ element.name }}" id="{{ element.name }}" class="w-full border-2 {% if element.errors %}border-red-300{% else %}border-gray-300{% endif %} rounded-md focus:outline-none focus:border-blue-500" placeholder="{{ widget.attrs.placeholder }}">
+                </div>
+                <div class="mb-2 text-red-600 text-xs italic">
+                    {% for error in element.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Submit </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
