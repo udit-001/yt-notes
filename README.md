@@ -32,7 +32,6 @@ To install the, follow these steps:
    ```
    python manage.py runserver
    ```
-8. Open your web browser and go to `http://127.0.0.1:8000/` to view the app.
 
 
 ## Running Tests
@@ -41,3 +40,7 @@ To run the tests for the application, use the following command:
 ```
 python manage.py test app
 ```
+
+## API Documentation
+
+The API documentation for this app can be accessed at http://localhost:8000/api/docs/
