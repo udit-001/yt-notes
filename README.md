@@ -98,3 +98,13 @@ To view all the notes associated with a specific video, make a GET request to `/
 Note:
 - Ordering based on timestamp and creation time is supported for the notes list API.
 - All list endpoints support Limit and Offset pagination.
+
+
+## Technologies Used
+- [Django](https://www.djangoproject.com/)
+- [Django Rest Framework](https://www.django-rest-framework.org/)
+- [DRF Spectacular](https://drf-spectacular.readthedocs.io/)
+- SQLite
+- [Tailwind](https://tailwindcss.com/)
+- JavaScript
+- [YouTube Iframe API](https://developers.google.com/youtube/iframe_api_reference) : Used for interacting with the YouTube Embed and getting the current timestamp while storing notes.
