@@ -32,7 +32,11 @@ To install the, follow these steps:
    ```
    python manage.py runserver
    ```
+8. To get started, please open your web browser and navigate to `http://localhost:8000`
 
+   Once you're there, you'll be able to interact with the application by entering a YouTube video link in the provided input field. The video will then load, and you can start adding notes as you watch.
+
+   ![](./screenshots/url_page.png)
 
 ## Running Tests
 
