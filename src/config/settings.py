@@ -1,6 +1,8 @@
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from decouple import config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -63,11 +65,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config("DATABASE_NAME", default="postgres"),
+        'USER': config("DATABASE_USER", default="postgres"),
+        'PASSWORD': config("DATABASE_PASSWORD", default="postgres"),
+        'HOST': config("DATABASE_HOST", "localhost"),
+        'OPTIONS': {'sslmode': 'require'},
     }
 }
 
