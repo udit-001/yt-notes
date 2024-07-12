@@ -4,8 +4,12 @@ from .models import *
 from .serializers import *
 
 
-class VideoCreateView(generics.CreateAPIView):
+class VideoCreateView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        session_id = self.request.session.session_key
+        return Video.objects.filter(session_id=session_id)
 
     def perform_create(self, serializer):
         serializer.save(session_id=self.request.session.session_key)
