@@ -49,5 +49,37 @@ The API documentation for this app can be accessed at http://localhost:8000/api/
 
 The following API endpoints are available:
 
+#### Create a new video
+
+To create a new video, send a POST request to `/api/videos/` with the following payload:
+
+```json
+{
+    "title": "Video title",
+    "url": "https://www.youtube.com/watch?v=ABCDEFGHIJ",
+    "duration": 120
+}
+```
+
+Note:
+- The url field must be a valid YouTube URL.
+- The duration field must be an integer representing the length of the video in seconds.
+
+
 * `/api/videos/` (POST): Create a new video for the current session
 * `/api/videos/<int:pk>/notes/` (GET, POST): List all notes for a video or create a new note.
+
+
+#### Create a new note
+To create a new note, send a POST request to `/api/videos/<int:pk>/notes/` with the following payload:
+
+```json
+{
+  "content": "Note content",
+  "timestamp": 12345
+}
+```
+
+Note:
+- The timestamp field is an integer representing a point in time in the video where the note was added, it should be less than or equal to the duration of the video.
+- `<int:pk>` is the id of the video returned by the `/api/videos/` endpoint as response. Eg: `/api/videos/3/notes/`
