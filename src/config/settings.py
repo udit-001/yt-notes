@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import sentry_sdk
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,9 +14,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-l+@8%h$mw%y^(=znffc8j(61mn)9p5952$r&=o&yr=kf0sa#35'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DJANGO_DEBUG", default=True)
 
 ALLOWED_HOSTS = []
+
+sentry_sdk.init(
+    dsn=config("SENTRY_DSN_URL"),
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
 
 
 # Application definition
