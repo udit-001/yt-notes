@@ -1,8 +1,9 @@
-## Requirements
-This app requires Python 3.10 or higher, up to version 3.12.
+## Technical Requirements
+- Python : 3.10 or higher
+- SQLite
 
 ## Installation
-To install the, follow these steps:
+To install the application, follow these steps:
 
 1. Clone the repository:
    ```bash
@@ -47,7 +48,7 @@ python manage.py test app
 
 ## API Documentation
 
-The API documentation for this app can be accessed at http://localhost:8000/api/docs/
+Once you're got the application running, you can view the API docs for this app by visiting http://localhost:8000/api/docs/
 
 ### API Endpoints
 
