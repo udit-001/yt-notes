@@ -44,3 +44,10 @@ python manage.py test app
 ## API Documentation
 
 The API documentation for this app can be accessed at http://localhost:8000/api/docs/
+
+### API Endpoints
+
+The following API endpoints are available:
+
+* `/api/videos/` (POST): Create a new video for the current session
+* `/api/videos/<int:pk>/notes/` (GET, POST): List all notes for a video or create a new note.
