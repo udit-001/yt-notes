@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from .models import Video, Note
+
+from .models import Note, Video
 
 
 class VideosTest(APITestCase):
@@ -161,6 +162,24 @@ class NoteCreationTests(APITestCase):
         self.assertEqual(
             notes_create_response.json(),
             {"timestamp": ["Timestamp can't be greater than video duration"]},
+        )
+
+    def test_note_create_invalid_negative_timestamp(self):
+        invalid_notes_create_payload = {
+            "content": "This is some text",
+            "timestamp": -7890,
+        }
+        notes_create_url = reverse("note-list-create", kwargs={"pk": self.video_id})
+        notes_create_response = self.client.post(
+            notes_create_url, format="json", data=invalid_notes_create_payload
+        )
+        self.assertEqual(notes_create_response.status_code, 400)
+        self.assertEqual(
+            notes_create_response.headers.get("Content-Type"), "application/json"
+        )
+        self.assertEqual(
+            notes_create_response.json(),
+            {"timestamp": ["Ensure this value is greater than or equal to 0."]},
         )
 
     def test_note_missing_content(self):
