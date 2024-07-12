@@ -27,6 +27,35 @@ class VideosTest(APITestCase):
         self.assertEqual(create_response.data["title"], self.payload["title"])
         self.assertEqual(create_response.data["duration"], self.payload["duration"])
 
+    def test_video_create_invalid_yt(self):
+        data = self.payload.copy()
+        data["url"] = "https://www.youtube.com/watch?zFZrkCIc2Oc"
+        create_response = self.client.post(
+            self.video_create_url, format="json", data=data
+        )
+        self.assertEqual(create_response.status_code, 400)
+        self.assertEqual(
+            create_response.headers.get("Content-Type"), "application/json"
+        )
+        self.assertEqual(
+            create_response.json(), {"url": ["This isn't a valid YouTube URL"]}
+        )
+
+    def test_video_create_invalid_duration(self):
+        data = self.payload.copy()
+        data["duration"] = -908
+        create_response = self.client.post(
+            self.video_create_url, format="json", data=data
+        )
+        self.assertEqual(create_response.status_code, 400)
+        self.assertEqual(
+            create_response.headers.get("Content-Type"), "application/json"
+        )
+        self.assertEqual(
+            create_response.json(),
+            {"duration": ["Ensure this value is greater than or equal to 0."]},
+        )
+
     def test_video_create_invalid_url(self):
         data = self.payload.copy()
         data["url"] = "https://google.com"
@@ -111,7 +140,10 @@ class NoteCreationTests(APITestCase):
         self.assertEqual(
             notes_create_response.headers.get("Content-Type"), "application/json"
         )
-        self.assertEqual(notes_create_response.json(), {"detail": "No Video matches the given query."})
+        self.assertEqual(
+            notes_create_response.json(),
+            {"detail": "No Video matches the given query."},
+        )
 
     def test_note_create_invalid_timestamp(self):
         invalid_notes_create_payload = {
