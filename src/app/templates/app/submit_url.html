@@ -4,7 +4,10 @@
     <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
       <div class="md:flex w-full">
         <div class="p-6 w-full">
-          <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">YT Notes App</div>
+          <div class="flex justify-between items-center">
+            <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">YT Notes App</div>
+            <a class="px-2 py-1 bg-blue-500 text-white rounded-md" href="/api/docs" target="_blank">API Docs</a>
+          </div>
           <form method="POST" class="mt-4">
             {% csrf_token %}
             {% for element in form %}
