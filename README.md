@@ -83,3 +83,10 @@ To create a new note, send a POST request to `/api/videos/<int:pk>/notes/` with 
 Note:
 - The timestamp field is an integer representing a point in time in the video where the note was added, it should be less than or equal to the duration of the video.
 - `<int:pk>` is the id of the video returned by the `/api/videos/` endpoint as response. Eg: `/api/videos/3/notes/`
+
+#### List all videos
+You can make a GET request to `/api/videos/` view all the videos stored by a user.
+
+
+#### List all notes
+You can make a GET request to `/api/videos/<int:pk>/notes/` view all the videos stored by a user.
