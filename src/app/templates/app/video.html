@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
-    <div class="mt-6 mr-6 flex flex-row-reverse">
+    <div class="mt-6 flex px-4 justify-between">
+        <a class="px-4 py-2 bg-blue-500 text-white rounded-md invisible" id="notes-link" target="_blank">View all notes</a>
         <a class="px-4 py-2 bg-blue-500 text-white rounded-md" href={% url 'start-video' %}>Watch another video</a>
     </div>
     <div class="md:flex w-full">
@@ -128,6 +129,9 @@
                         setTimeout(() => {
                             updateStatus({})
                         }, 3000)
+                        const notesLink = document.querySelector("#notes-link")
+                        notesLink.classList.remove("invisible")
+                        notesLink.href = `/api/videos/${videoId}/notes/`;
                     }
                     else if(response.status === 400){
                         updateStatus({"type": "failure", "text": JSON.stringify(data)})
