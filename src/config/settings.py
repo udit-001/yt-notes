@@ -2,7 +2,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from decouple import config
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -65,13 +64,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config("DATABASE_NAME", default="postgres"),
         'USER': config("DATABASE_USER", default="postgres"),
         'PASSWORD': config("DATABASE_PASSWORD", default="postgres"),
-        'HOST': config("DATABASE_HOST", "localhost"),
+        'HOST': config("DATABASE_HOST", default="localhost"),
         'OPTIONS': {'sslmode': 'require'},
     }
 }
@@ -112,7 +112,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = 'staticfiles/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
