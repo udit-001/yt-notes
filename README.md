@@ -95,8 +95,15 @@ To view all the videos stored by a user, make a GET request to `/api/videos/`.
 #### List all notes for a video
 To view all the notes associated with a specific video, make a GET request to `/api/videos/<int:pk>/notes/`, where `<int:pk>` is the ID of the video.
 
+##### Ordering Results
+The API also allows you to order the results based on the note timestamp or the creation timestamp. You can achieve this by using the 'ordering' query parameter. The following values are supported:
+- `timestamp`: Returns results in ascending order based on the note timestamp.
+- `-timestamp`: Returns results in descending order based on the note timestamp.
+- `created_at`: Returns results in ascending order based on the creation timestamp.
+- `-created_at`: Returns results in descending order based on the creation timestamp.
+
+
 Note:
-- Ordering based on timestamp and creation time is supported for the notes list API.
 - All list endpoints support Limit and Offset pagination.
 
 
